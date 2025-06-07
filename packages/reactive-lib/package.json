@@ -1,0 +1,16 @@
+{
+  "name": "ng-reactive-kit",
+  "version": "0.0.1",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/common": ">=19.0.0",
+    "@angular/core": ">=19.0.0",
+    "@microsoft/signalr": "^8.0.7",
+    "rxjs": "~7.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@microsoft/signalr": {
+      "optional": true
+    }
+  }
+}
