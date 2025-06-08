@@ -1,6 +1,6 @@
 # ReactiveKit
 
-**Fill the gaps in modern reactive Angular.**
+<p align="center"> <img src="images/reactive-kit-small.webp" alt="Logo" height="100" /> </p> <h3 align="center"><em>Fill the gaps in modern reactive Angular.</em></h3>
 
 A lightweight set of utilities that make reactive Angular apps more enjoyable and less boilerplate-heavy.
 Works great alongside [ngxtension](https://ngxtension.netlify.app/).
