@@ -5,11 +5,16 @@
   "peerDependencies": {
     "@angular/common": ">=19.0.0",
     "@angular/core": ">=19.0.0",
+    "@angular/router": ">=19.0.0",
     "@microsoft/signalr": "^8.0.7",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.0",
+    "ngxtension": "^5.0.0"
   },
   "peerDependenciesMeta": {
     "@microsoft/signalr": {
+      "optional": true
+    },
+    "ngxtension": {
       "optional": true
     }
   }
