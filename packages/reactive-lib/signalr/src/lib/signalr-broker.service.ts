@@ -1,4 +1,4 @@
-import { Injectable, isDevMode } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HubConnection } from '@microsoft/signalr';
 import { Observable, Subject } from 'rxjs';
 import { filterMessage } from './rxjs/map-to-payload';
@@ -9,12 +9,7 @@ import {
   SignalRMessagesMap,
   SignalRNamspaces,
 } from './signalr.types';
-
-const log = (message: string) => {
-  if (isDevMode()) {
-    console.log('[ng-reactive-kit]', message);
-  }
-};
+import { log } from './log';
 
 type TransformerFn<TKey extends SignalREventNames> = (
   payload: MapShapeToAny<SignalRMessagesMap[TKey]>

@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "ng-reactive-kit": ["packages/reactive-lib/src/index.ts"],
+      "ng-reactive-kit/persistence": ["packages/reactive-lib/persistence/src/index.ts"],
       "ng-reactive-kit/signalr": ["packages/reactive-lib/signalr/src/index.ts"]
     }
   },
