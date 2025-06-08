@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:dev": "pnpm dlx vitepress dev",
+    "docs:build": "pnpm dlx vitepress build",
+    "docs:preview": "pnpm dlx vitepress preview"
   }
 }
