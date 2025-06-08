@@ -23,10 +23,6 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-defaults:
-  run:
-    working-directory: apps/docs
-
 jobs:
   # Build job
   build:
@@ -50,7 +46,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install # or pnpm install / yarn install / bun install
       - name: Build with VitePress
-        run: pnpm docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
+        working-directory: apps/docs
+        run: pnpm install && pnpm docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
