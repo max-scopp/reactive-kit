@@ -19,7 +19,7 @@ export function injectSignalrMessageStream<TEventName extends SignalREventNames>
   event: TEventName
 ): Observable<SignalRMessage<TEventName>>;
 export function injectSignalrMessageStream(): Observable<SignalRMessage>;
-export function injectSignalrMessageStream<TEventName extends keyof SignalRMessagesMap>(event?: TEventName) {
+export function injectSignalrMessageStream<TEventName extends SignalREventNames>(event?: TEventName) {
   const broker = inject(SignalrBrokerService);
   const stream: Observable<unknown> = event === undefined ? broker.onAny() : broker.on(event);
 

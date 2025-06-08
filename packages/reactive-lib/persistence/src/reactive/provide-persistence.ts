@@ -3,7 +3,7 @@ import { PersistenceService } from '../persistence.service';
 import { PersistenceBucket } from '../persistence.types';
 import { appInjector } from '../shared-injector';
 
-export function providedPersistence(defaultBucket: PersistenceBucket = 'localStorage') {
+export function providePersistence(defaultBucket: PersistenceBucket = 'localStorage') {
   return provideAppInitializer(() => {
     const injector = inject(Injector);
     inject(PersistenceService);

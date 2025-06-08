@@ -17,6 +17,8 @@
     "paths": {
       "ng-reactive-kit": ["packages/reactive-lib/src/index.ts"],
       "ng-reactive-kit/persistence": ["packages/reactive-lib/persistence/src/index.ts"],
+      "ng-reactive-kit/rate-limiting": ["packages/reactive-lib/rate-limiting/src/index.ts"],
+      "ng-reactive-kit/routing": ["packages/reactive-lib/routing/src/index.ts"],
       "ng-reactive-kit/signalr": ["packages/reactive-lib/signalr/src/index.ts"]
     }
   },

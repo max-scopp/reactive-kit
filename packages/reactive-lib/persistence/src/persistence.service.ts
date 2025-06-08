@@ -11,11 +11,11 @@ export class PersistenceService {
 
   protected changes$ = fromEvent(window, 'storage', (event) => event as StorageEvent);
 
-  serialize<T>(value: T) {
+  protected serialize<T>(value: T) {
     return JSON.stringify(value);
   }
 
-  deserialize<T>(value: string | null): T | null {
+  protected deserialize<T>(value: string | null): T | null {
     if (value === null) {
       log('deserialize value not present');
       return value;

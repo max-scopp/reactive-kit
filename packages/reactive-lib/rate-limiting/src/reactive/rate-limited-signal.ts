@@ -40,7 +40,7 @@ export function rateLimitedSignal<T>(initialValue: T, options: RateLimitedSignal
 
   const stream =
     mode === 'debounce'
-      ? subject.pipe(debounceTime(delayMs))
+      ? subject.pipe(debounceTime(delayMs, asyncScheduler))
       : subject.pipe(
           throttleTime(delayMs, asyncScheduler, {
             leading: atStart,
