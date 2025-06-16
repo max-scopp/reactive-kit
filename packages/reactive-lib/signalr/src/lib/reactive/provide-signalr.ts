@@ -1,6 +1,6 @@
 import { inject, provideAppInitializer } from '@angular/core';
 import { HubConnectionBuilder } from '@microsoft/signalr';
-import { from, map, mergeMap, of } from 'rxjs';
+import { from, mergeMap, of } from 'rxjs';
 import { SignalrBrokerService } from '../signalr-broker.service';
 
 interface WithHub {
@@ -16,7 +16,8 @@ export function providedSignalR(...withHubs: WithHub[]) {
       mergeMap((hub) => {
         const hubConnection = hub.hubBuilder.build();
 
-        return broker.connectToHub(hub.hubName, hubConnection);
+        // return broker.connectToHub(hub.hubName, hubConnection);
+        return of(true);
       })
     );
   });

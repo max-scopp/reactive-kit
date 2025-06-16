@@ -7,14 +7,22 @@
     "@angular/core": ">=19.0.0",
     "@angular/router": ">=19.0.0",
     "@microsoft/signalr": "^8.0.7",
-    "rxjs": "~7.8.0",
-    "ngxtension": "^5.0.0"
+    "ngxtension": "^5.0.0",
+    "@angular/cdk": "^20.0.2",
+    "@angular/material": "^20.0.2",
+    "rxjs": "~7.8.0"
   },
   "peerDependenciesMeta": {
     "@microsoft/signalr": {
       "optional": true
     },
     "ngxtension": {
+      "optional": true
+    },
+    "@angular/cdk": {
+      "optional": true
+    },
+    "@angular/material": {
       "optional": true
     }
   }

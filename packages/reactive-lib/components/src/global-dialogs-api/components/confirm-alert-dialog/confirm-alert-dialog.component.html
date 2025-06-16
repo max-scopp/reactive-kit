@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+
+@if (data.message) {
+    <div mat-dialog-content>{{ data.message }}</div>
+}
+
+<div mat-dialog-actions>
+    @if (data.confirm) {
+        <button mat-button [mat-dialog-close]="false">{{ data.rejectText ?? 'Abort' }}</button>
+        <button mat-flat-button [mat-dialog-close]="true" class="{{ data.destructiveAction ? 'destructive-btn' : '' }}">
+            {{ data.confirmText ?? 'Confirm' }}
+        </button>
+    } @else {
+        <button mat-button [mat-dialog-close]="true">{{ data.okText ?? 'OK' }}</button>
+    }
+</div>

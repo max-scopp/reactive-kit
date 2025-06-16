@@ -16,10 +16,13 @@
     "baseUrl": ".",
     "paths": {
       "ng-reactive-kit": ["packages/reactive-lib/src/index.ts"],
+      "ng-reactive-kit/components": ["packages/reactive-lib/components/src/index.ts"],
       "ng-reactive-kit/persistence": ["packages/reactive-lib/persistence/src/index.ts"],
       "ng-reactive-kit/rate-limiting": ["packages/reactive-lib/rate-limiting/src/index.ts"],
       "ng-reactive-kit/routing": ["packages/reactive-lib/routing/src/index.ts"],
-      "ng-reactive-kit/signalr": ["packages/reactive-lib/signalr/src/index.ts"]
+      "ng-reactive-kit/shared": ["packages/reactive-lib/shared/src/index.ts"],
+      "ng-reactive-kit/signalr": ["packages/reactive-lib/signalr/src/index.ts"],
+      "ng-reactive-kit/templates": ["packages/reactive-lib/templates/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

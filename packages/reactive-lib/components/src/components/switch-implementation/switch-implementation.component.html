@@ -1,0 +1,5 @@
+@let cmp = activeComponent();
+
+@if(cmp !== null) {
+  <ng-container *ngComponentOutlet="cmp; inputs: inputs()" />
+}

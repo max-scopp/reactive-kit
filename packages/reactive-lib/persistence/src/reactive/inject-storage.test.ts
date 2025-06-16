@@ -1,20 +1,17 @@
-import { TestBed } from '@angular/core/testing';
-import { persistendSignal } from './persistend-signal';
-import { providedPersistence } from './provide-persistence';
 import { ApplicationInitStatus, signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { injectStorage } from './inject-storage';
 
 function shortId() {
   return [...Array(16)].map(() => Math.random().toString(36)[2]).join('');
 }
 
-describe('PersistenceService', () => {
+describe('injectStorage', () => {
   beforeEach(async () => {
     localStorage.clear();
     sessionStorage.clear();
 
-    TestBed.configureTestingModule({
-      providers: [providedPersistence()],
-    });
+    TestBed.configureTestingModule({});
 
     const initStatus = TestBed.inject(ApplicationInitStatus);
     await initStatus.donePromise;
@@ -25,7 +22,7 @@ describe('PersistenceService', () => {
 
     const INITIAL = 123;
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       storageKey: STORAGE_KEY,
       initialValue: INITIAL,
     }));
@@ -42,7 +39,7 @@ describe('PersistenceService', () => {
 
     const storageKey = signal(STORAGE_KEY);
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       storageKey: storageKey(),
       initialValue: INITIAL,
     }));
@@ -59,7 +56,7 @@ describe('PersistenceService', () => {
     const INITIAL = 123;
     const EXPECTED = 321;
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       storageKey: STORAGE_KEY,
       initialValue: INITIAL,
     }));
@@ -75,7 +72,7 @@ describe('PersistenceService', () => {
     const INITIAL = 123;
     const EXPECTED = 321;
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       storageKey: STORAGE_KEY,
       initialValue: INITIAL,
     }));
@@ -91,7 +88,7 @@ describe('PersistenceService', () => {
     const INITIAL = 123;
     const EXPECTED = 321;
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       bucket: 'sessionStorage',
       storageKey: STORAGE_KEY,
       initialValue: INITIAL,
@@ -108,7 +105,7 @@ describe('PersistenceService', () => {
     const INITIAL = 123;
     const EXPECTED = 321;
 
-    const mySignal = persistendSignal(() => ({
+    const mySignal = injectStorage(() => ({
       bucket: 'sessionStorage',
       storageKey: STORAGE_KEY,
       initialValue: INITIAL,

@@ -1,24 +1,31 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { HubConnection } from '@microsoft/signalr';
 import { Observable, Subject } from 'rxjs';
 import { filterMessage } from './rxjs/map-to-payload';
 import {
   MapShapeToAny,
+  NamespaceToEventName,
   SignalREventNames,
   SignalRMessage,
   SignalRMessagesMap,
-  SignalRNamspaces,
+  SignalRNamespaces,
 } from './signalr.types';
-import { log } from './log';
+import { log } from '../log';
 
 type TransformerFn<TKey extends SignalREventNames> = (
   payload: MapShapeToAny<SignalRMessagesMap[TKey]>
 ) => SignalRMessagesMap[TKey];
 
+export type SignalRTransformerMap = {
+  [key in SignalREventNames]?: TransformerFn<key>;
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class SignalrBrokerService {
+  readonly #injector = inject(Injector);
+
   protected hubConnections = new Map<string, HubConnection>();
 
   protected events$ = new Subject<SignalRMessage>();
@@ -26,17 +33,14 @@ export class SignalrBrokerService {
 
   protected listeningKeys = new Set<SignalREventNames>();
 
-  protected transformerMap: {
-    [key in SignalREventNames]: TransformerFn<key>;
-  } = {};
+  protected transformerMap: SignalRTransformerMap = {};
 
-  /**
-   * Emit an event for the application.
-   */
-  protected emit<TKey extends SignalRNamspaces>(event: TKey, payload: SignalRMessagesMap[TKey]) {
+  protected emit<
+    TKey extends SignalRNamespaces,
+    TEventName extends NamespaceToEventName<TKey> = NamespaceToEventName<TKey>
+  >(event: TKey, payload: TEventName extends keyof SignalRMessagesMap ? SignalRMessagesMap[TEventName] : never) {
     this.events$.next({ event, payload });
   }
-
   /**
    * Listen to an specific event from the signalr stream.
    * @public
@@ -97,11 +101,11 @@ export class SignalrBrokerService {
     hubName: string
   ) {
     hub.on(String(event), (payload) => {
-      log(`RECV[${hubName}]: '${JSON.stringify(event)}'`);
+      log(this.#injector, `RECV[${hubName}]: '${JSON.stringify(event)}'`);
 
-      const namespace = String(event).split('/') as SignalRNamspaces;
+      // const namespace = String(event).split('/') as SignalRNamspaces;
 
-      this.emit(namespace, this.#transformPayload(event, payload));
+      // this.emit(namespace, this.#transformPayload(event, payload));
     });
   }
 }

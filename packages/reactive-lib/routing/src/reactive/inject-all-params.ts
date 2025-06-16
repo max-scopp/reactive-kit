@@ -1,6 +1,6 @@
 import { computed, Signal } from '@angular/core';
 import { Params } from '@angular/router';
-import { injectDeepestActiveRoute } from './inject-deepest-active-route';
+import { injectLeafActivatedRoute } from './inject-leaf-activated-route';
 
 export type TransformParamsFn<TResult> = (params: Params) => TResult;
 
@@ -18,7 +18,7 @@ export function injectAllParams(): Signal<Params>;
 export function injectAllParams(key: string): Signal<Params[keyof Params]>;
 export function injectAllParams<TResult>(transformer: TransformParamsFn<TResult>): Signal<TResult>;
 export function injectAllParams<TResult>(arg?: string | TransformParamsFn<TResult>) {
-  const deepestRoute = injectDeepestActiveRoute();
+  const deepestRoute = injectLeafActivatedRoute();
 
   return computed(() => {
     const params = deepestRoute().snapshot.params;

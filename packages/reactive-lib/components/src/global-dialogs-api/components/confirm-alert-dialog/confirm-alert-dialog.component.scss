@@ -1,0 +1,10 @@
+@use '@angular/material' as mat;
+
+.destructive-btn {
+    @include mat.button-overrides(
+        (
+            filled-container-color: var(--mx-error-normal),
+            filled-label-text-color: var(--mx-error-foreground),
+        )
+    );
+}

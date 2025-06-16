@@ -21,7 +21,10 @@
             "input": "apps/reactive-kit/public"
           }
         ],
-        "styles": ["apps/reactive-kit/src/styles.css"],
+        "styles": [
+          "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/reactive-kit/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {

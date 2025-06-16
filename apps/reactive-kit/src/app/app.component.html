@@ -1,2 +1,48 @@
-<app-nx-welcome></app-nx-welcome>
+<h3>injectStorage</h3>
+<pre><code>{{ userId() }}</code></pre>
+<button (click)="userId.reset()">reset</button>
+<input
+  type="number"
+  placeholder="value"
+  [defaultValue]="userId()"
+  (input)="userId.set($any($event.target).valueAsNumber)"
+/>
+<input
+  type="string"
+  placeholder="storage key"
+  [defaultValue]="storageKey()"
+  (input)="storageKey.next($any($event.target).value)"
+/>
+
+<!-- ------------------------------------------- -->
+
+<h3>injectRateLimit</h3>
+<pre><code>{{ searchQuery() || 'n/a' }}</code></pre>
+<input type="text" (input)="searchQuery.next($any($event.target).value)" />
+
+<!-- ------------------------------------------- -->
+
+<h3>LogPipe, ObjectEntriesPipe</h3>
+
+{{ complexObject | log: "watch me" }}
+
+@for (entry of complexObject | objectentries; track entry.key) {
+  <li>{{ entry.key }} &mdash; {{ entry.value }}</li>
+}
+
+<!-- ------------------------------------------- -->
+
+<h3>Switch implementation</h3>
+<button (click)="perspective.set(null)">None</button>
+<button (click)="perspective.set('view-a')">View A</button>
+<button (click)="perspective.set('view-b')">View b</button>
+<!-- <rk-switch-implementation [map]="implMap" [key]="perspective()"></rk-switch-implementation> -->
+
+<!-- ------------------------------------------- -->
+
+<h3>injectCanLeave</h3>
+
+<a routerLink="/view-a" >Try Leaving View A</a>
+
+
 <router-outlet></router-outlet>

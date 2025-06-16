@@ -2,7 +2,7 @@
   "name": "ng-reactive-lib",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/reactive-lib/src",
-  "prefix": "lib",
+  "prefix": "rk",
   "projectType": "library",
   "release": {
     "version": {

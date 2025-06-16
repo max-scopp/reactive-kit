@@ -1,71 +1,65 @@
-import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
+import { inject, InjectionToken, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { asyncScheduler, debounceTime, Subject, throttleTime } from 'rxjs';
+import { asyncScheduler, auditTime, debounceTime, sampleTime, Subject, ThrottleConfig, throttleTime } from 'rxjs';
 
-const DEFAULT_RATE_LIMIT_MS = 100 as const;
+export const RK_RATE_LIMIT = new InjectionToken('RK_RATE_LIMIT', {
+  providedIn: 'root',
+  factory: () => 200,
+});
 
-export type RateLimitedSignal<T> = WritableSignal<T> & {
-  destroy: () => void;
+export const RK_THROTTLE_CONFIG = new InjectionToken('RK_THROTTLE_CONFIG', {
+  providedIn: 'root',
+  factory: () => ({ leading: true, trailing: false }),
+});
+
+export type RateLimitedSignal<T> = Signal<T> & {
+  next: (value: T) => void;
 };
 
 export interface RateLimitedSignalOptions {
   /**
-   * @default 100
+   * Time window in milliseconds used by the operator.
+   * Defaults to the RK_RATE_LIMIT injection token.
    */
-  delayMs?: number;
+  durationMs?: number;
 
   /**
-   * 'throttle' or 'debounce'
-   * @default 'throttle'
+   * RxJS operator used to rate-limit updates.
+   * @default debounceTime
    */
-  mode?: 'throttle' | 'debounce';
+  operator?: typeof debounceTime | typeof throttleTime | typeof sampleTime | typeof auditTime;
 
   /**
-   * For throttle: emit on leading edge (true) or trailing (false)
-   * Ignored in debounce mode
-   * @default true
+   * Configuration for `throttleTime`, if used.
+   * Defaults to the RK_THROTTLE_CONFIG injection token.
    */
-  atStart?: boolean;
+  config?: ThrottleConfig;
 }
 
-export function rateLimitedSignal<T>(initialValue: T, options: RateLimitedSignalOptions = {}): RateLimitedSignal<T> {
-  const { delayMs = DEFAULT_RATE_LIMIT_MS, mode = 'debounce', atStart = true } = options;
+/**
+ * Creates a signal that buffers and emits updates using a rate-limiting RxJS operator.
+ */
+export function injectRateLimited<T>(initialValue: T, options: RateLimitedSignalOptions = {}) {
+  const defaultRateLimit = inject(RK_RATE_LIMIT);
+  const defaultThrottleConfig = inject(RK_THROTTLE_CONFIG);
 
-  const destroyRef = inject(DestroyRef, {
-    optional: true,
-  });
+  const operator = options.operator ?? debounceTime;
 
   const subject = new Subject<T>();
   const inner = signal<T>(initialValue);
 
-  const stream =
-    mode === 'debounce'
-      ? subject.pipe(debounceTime(delayMs, asyncScheduler))
-      : subject.pipe(
-          throttleTime(delayMs, asyncScheduler, {
-            leading: atStart,
-            trailing: !atStart,
-          })
-        );
+  subject
+    .pipe(
+      operator(options.durationMs ?? defaultRateLimit, asyncScheduler, options.config ?? defaultThrottleConfig),
+      takeUntilDestroyed()
+    )
+    .subscribe((value) => inner.set(value));
 
-  const streamWithLifecycles = destroyRef ? stream.pipe(takeUntilDestroyed(destroyRef)) : stream;
-  const subscription = streamWithLifecycles.subscribe((value) => inner.set(value));
-
-  return new Proxy(inner, {
+  return new Proxy(inner.asReadonly(), {
     get(target, prop, receiver) {
       switch (prop) {
-        case 'set':
+        case 'next':
           return (value: T) => subject.next(value);
-        case 'update':
-          return (updater: (value: T) => T) => {
-            const value = updater(inner());
-            subject.next(value);
-          };
-        case 'destroy':
-          return () => {
-            subscription.unsubscribe();
-            subject.complete();
-          };
         default:
           return Reflect.get(target, prop, receiver);
       }

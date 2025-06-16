@@ -4,5 +4,5 @@ export function isMessage<const TEventName extends SignalREventNames>(
   message: SignalRMessage,
   event: TEventName
 ): message is SignalRMessage<TEventName> {
-  return message.event === event;
+  return (message.event as string[]).join('/') === event;
 }

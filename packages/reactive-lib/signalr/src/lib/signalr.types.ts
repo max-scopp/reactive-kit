@@ -3,14 +3,27 @@
  */
 const internalTypeFixupSymbol = Symbol('MessageBrokerMap');
 
-type EventNameToNamespace<
+export type EventNameToNamespace<
   S extends string,
   Delimiter extends string = '/'
 > = S extends `${infer Head}${Delimiter}${infer Tail}` ? [Head, ...EventNameToNamespace<Tail, Delimiter>] : [S];
 
+export type NamespaceToEventName<T extends string[], Delimiter extends string = '/'> = T extends [
+  infer Head extends string,
+  ...infer Tail extends string[]
+]
+  ? Tail['length'] extends 0
+    ? Head
+    : `${Head}${Delimiter}${NamespaceToEventName<Tail, Delimiter>}`
+  : '';
+
 export type SignalREventNames = Exclude<keyof SignalRMessagesMap, typeof internalTypeFixupSymbol>;
 
-export type SignalRNamspaces = EventNameToNamespace<SignalREventNames>;
+export type SignalRNamespaces = EventNameToNamespace<SignalREventNames>;
+
+export type RejoinedSignalREvents = SignalRNamespaces extends infer T extends string[]
+  ? NamespaceToEventName<T>
+  : never;
 
 export interface SignalRMessagesMap {
   [internalTypeFixupSymbol]: never;
