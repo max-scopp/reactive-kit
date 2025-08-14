@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+
 /**
  * @internal keeps `MessageBrokerMap` for extensibility or library consumers.
  */
@@ -17,7 +20,8 @@ export interface SignalRMessagesMap {
 }
 export interface SignalRMessage<TKey extends SignalREventNames = SignalREventNames> {
   event: EventNameToNamespace<TKey>;
-  payload: SignalRMessagesMap[TKey];
+  // payload: SignalRMessagesMap[TKey];
+  payload: any;
 }
 
 export type MapShapeToAny<TObject extends object> = {

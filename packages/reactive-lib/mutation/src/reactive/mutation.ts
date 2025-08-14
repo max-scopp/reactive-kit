@@ -6,7 +6,7 @@ export type MutationFn<TVariables, TData> = (variables: TVariables) => Promise<T
 export type MutationOptions<TData = unknown, TVariables = unknown> =
   | MutationFn<TVariables, TData>
   | {
-      mutation: MutationFn<TVariables, TData>;
+      mutate: MutationFn<TVariables, TData>;
       onMutate?: (variables: TVariables) => void;
       onError?: (error: HttpErrorResponse, variables: TVariables) => void;
       onSuccess?: (data: TData, variables: TVariables) => void;
@@ -47,13 +47,13 @@ class MutationImpl<TData, TVariables> {
   #executeFn: MutationFn<TVariables, TData>;
 
   constructor(private readonly options: MutationOptions<TData, TVariables>, private readonly http: HttpClient) {
-    this.#executeFn = options instanceof Function ? options : options.mutation;
+    this.#executeFn = options instanceof Function ? options : options.mutate;
   }
 
   get _opts() {
     if (this.options instanceof Function) {
       return {
-        mutation: this.options,
+        mutate: this.options,
       };
     }
 

@@ -27,13 +27,14 @@ export class SignalrBrokerService {
   protected listeningKeys = new Set<SignalREventNames>();
 
   protected transformerMap: {
-    [key in SignalREventNames]: TransformerFn<key>;
+    [key in SignalREventNames]?: TransformerFn<key>;
   } = {};
 
   /**
    * Emit an event for the application.
    */
-  protected emit<TKey extends SignalRNamspaces>(event: TKey, payload: SignalRMessagesMap[TKey]) {
+  // protected emit<TKey extends SignalRNamspaces>(event: TKey, payload: SignalRMessagesMap[TKey]) {
+  protected emit<TKey extends SignalRNamspaces>(event: TKey, payload: any) {
     this.events$.next({ event, payload });
   }
 

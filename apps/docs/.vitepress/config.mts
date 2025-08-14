@@ -26,6 +26,10 @@ export default defineConfig({
             link: '/features/persistence',
           },
           {
+            text: 'Mutation',
+            link: '/features/mutation',
+          },
+          {
             text: 'Rate Limited',
             link: '/features/rate-limited',
           },

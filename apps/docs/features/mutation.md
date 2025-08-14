@@ -1,23 +1,22 @@
-
 ## Mutation
 
 Reactive mutation utilities for Angular, supporting both Promise-based and HttpRequest-based mutation functions. Provides a signal-driven API for managing mutation state, error handling, and success callbacks.
 
 ### API
 
-```typescript
+```ts
 import { mutation, MutationOptions, Mutation } from 'ng-reactive-kit/mutation';
 ```
 
 #### Usage
 
-```typescript
+```ts
 // Simple
 const mutate = mutation((variables: MyVars) => new HttpRequest('POST', '/api', variables));
 
 // With side-effects
-const mutate = mutation({
-  mutation: (variables: MyVars) => new HttpRequest('POST', '/api', variables),
+const mutateWithFx = mutation({
+  mutate: (variables: MyVars) => new HttpRequest('POST', '/api', variables),
   onMutate: (vars) => { /* side effect before mutation */ },
   onSuccess: (data, vars) => { /* handle success */ },
   onError: (error, vars) => { /* handle error */ },
@@ -25,7 +24,7 @@ const mutate = mutation({
 });
 
 // Execute mutation
-mutate.execute({ foo: 'bar' });
+await mutate.execute({ foo: 'bar' });
 
 // Read mutation state
 const state = mutate(); // 'unknown' | 'pending' | 'settled'
@@ -33,7 +32,7 @@ const state = mutate(); // 'unknown' | 'pending' | 'settled'
 
 #### MutationOptions
 
-- `mutation`: (variables) => Promise<TData> | HttpRequest<TVariables>
+- `mutation`: `(variables) => Promise<TData> | HttpRequest<TVariables>`
 - `onMutate?`: Called before mutation executes
 - `onSuccess?`: Called on success
 - `onError?`: Called on error
@@ -56,15 +55,15 @@ const state = mutate(); // 'unknown' | 'pending' | 'settled'
 
 ### Example
 
-```typescript
+```ts
 const createUser = mutation({
-  mutation: (user) => new HttpRequest('POST', '/users', user),
+  mutate: (user) => new HttpRequest('POST', '/users', user),
   onSuccess: (data) => alert('User created!'),
   onError: (err) => alert('Failed!'),
 });
 
 // In a component
-async function submit(user) {
+async function submit(user: User) {
   await createUser.execute(user);
 }
 
@@ -73,19 +72,18 @@ if (createUser.isPending()) {
 }
 ```
 
-
 ### Other Usage Examples
 
 ```ts
 // Using fetch for Promise-based mutation
 const mutateFetch = mutation({
-  mutation: (variables) => fetch('/api', { method: 'POST', body: JSON.stringify(variables) }),
+  mutate: (variables) => fetch('/api', { method: 'POST', body: JSON.stringify(variables) }),
 });
 
 // Using RxJS firstValueFrom for HttpClient
 import { firstValueFrom } from 'rxjs';
 const mutateRx = mutation({
-  mutation: (variables) => firstValueFrom(http.request(new HttpRequest('POST', '/api', variables))),
+  mutate: (variables) => firstValueFrom(http.request(new HttpRequest('POST', '/api', variables))),
 });
 ```
 
